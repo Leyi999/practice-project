@@ -24,3 +24,5 @@ char CountMine(char Board[ROWS][COLS],char[ROWS][COLS] ,int row, int col);
 void Extend(char Board[ROWS][COLS], char show[ROWS][COLS], int row, int col);
 //判断赢没赢(赢返回 1 ，没赢返回 0 )
 int Is_win(char Board[ROWS][COLS],char show[ROWS][COLS], int row, int col,int nub);
+//游戏胜利 或 失败后延时打印结果
+void SleepPrint(char* p);

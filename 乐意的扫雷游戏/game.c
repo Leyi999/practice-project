@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include"game.h"
-#include"print.h"
+
 
 //初始化棋盘的函数
 void InitBoard(char Board[ROWS][COLS],int rows,int cols,char set) {
@@ -200,7 +200,15 @@ char FindMine(char Board[ROWS][COLS],char show[ROWS][COLS], int row,int col,int 
 	}
 	
 }
+void SleepPrint(char* p) {
+	int i;
+	int len = strlen(p);
+	for (i = 0; i < len; i += 2) {
+		printf("%c%c", *(p + i), *(p + i + 1));
+		Sleep(600);
+	}
 
+}
 void game() {
 	char Board[ROWS][COLS] = { 0 };//布置好雷的信息
 	char show[ROWS][COLS] = { 0 };//排查出雷的信息

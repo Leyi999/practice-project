@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #include "game.h"
-#include"print.h"
+#include"infor.h"
 
 int main() {
 	srand((unsigned int)time(NULL));
