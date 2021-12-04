@@ -22,7 +22,7 @@ void DisplayBoard(char Board[ROW][COL], int row, int col) {
 
 }
 void Player_Move(char Board[ROW][COL], int row, int col) {
-	printf("欣雨走:>");
+	printf("玩家走:>");
 	int ro, co;
 	while (1) {
 		scanf("%d %d", &ro, &co);
@@ -45,7 +45,7 @@ void Player_Move(char Board[ROW][COL], int row, int col) {
 }
 void Computer_Move(char Board[ROW][COL], int row, int col) {
 	int ro, co;
-	printf("乐意走:>\n");
+	printf("玩家走:>\n");
 	while (1) {
 		ro = rand() % row;
 		co = rand() % col;
@@ -117,18 +117,16 @@ char Is_win(char Board[ROW][COL], int row, int col) {
 		}
 	}
 
-	for (i = 1; i < row;i++) {
+	for (i = 1, j = 1; i < row&&j>=0; i++,j--) {
 		//0,2 //1,1 //2,0 
-		for (j = col - 2; j >= 0; j--) {
-			if ((Board[i][j] == Board[i - 1][j + 1]) && Board[i][j] != ' ') {
-				flag_right++;
-			}
-			if (2 == flag_right) {
-				return Board[i][j];
-			}
+		if ((Board[i][j] == Board[i - 1][j + 1]) && Board[i][j] != ' ') {
+			flag_right++;
 		}
-			
+		if (2 == flag_right) {
+			return Board[i][j];
 		}
+
+	}
 	
 	if(Is_full(Board,row,col)){
 		return 'P';

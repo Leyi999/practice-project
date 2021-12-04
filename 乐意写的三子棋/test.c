@@ -16,8 +16,6 @@ void INFOR() {
 			break;
 		case 2:infor();
 			break;
-		case 3:rewards();
-			break;
 		case 0:
 			break;
 		default:
@@ -55,11 +53,11 @@ void game() {
 		break;
 	case'X':
 		Sleep(1000); 
-		printf("欣雨赢了，好厉害!\n");
+		printf("你赢了，好厉害!\n");
 		break;
 	case'O':
 		Sleep(1000); 
-		printf("乐意赢了，笨蛋!\n");
+		printf("电脑赢了，笨蛋!\n");
 		break;
 	}
 }

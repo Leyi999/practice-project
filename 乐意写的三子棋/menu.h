@@ -9,5 +9,3 @@ void Infor_menu();
 void rules();
 //сно╥╪Р╫И
 void infor();
-//╫╠юЬпео╒
-void rewards();
