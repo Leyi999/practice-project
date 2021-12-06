@@ -3,27 +3,14 @@
 #include"game.h"
 #include"menu.h"
 
-void INFOR() {
-	int input=1 ;
-
-	while (input) {
-		Infor_menu();
-		printf("请选择序号:");
-		scanf("%d", &input);
-		printf("\n");
-		switch (input) {
-		case 1:rules();
-			break;
-		case 2:infor();
-			break;
-		case 0:
-			break;
-		default:
-			printf("输入无效，请重新输入\n");
-
-		}
-	}
+void Main_menu() {
+	printf("*************************\n");
+	printf("******1. 我很孤独********\n");
+	printf("******0. 我不孤独********\n");
+	printf("*************************\n");
+	printf("******2. 我不理解********\n");
 }
+
 void game() {
 	//储存数据 二维数组
 	char Board[ROW][COL];
@@ -61,6 +48,30 @@ void game() {
 		break;
 	}
 }
+
+void INFOR() {
+	int input = 1;
+
+	while (input) {
+		Infor_menu();
+		printf("请选择序号:");
+		scanf("%d", &input);
+		printf("\n");
+		switch (input) {
+		case 1:rules();
+			break;
+		case 2:infor();
+			break;
+		case 0:
+			printf("都懂了就来下棋吧！\n");
+			game();
+			break;
+		default:
+			printf("输入无效，请重新输入\n");
+
+		}
+	}
+}
 int main() {
 	srand((unsigned int)time(NULL));
 	int input;
@@ -70,13 +81,27 @@ int main() {
 		scanf("%d", &input);
 		switch (input) {
 		case 1:
-			game();
+			printf("\n既然你很孤独，我们来下棋吧！\n");
+			printf("\n需要看规则吗？\n\n");
+			printf("1. 需要，我不知道怎么下\n");
+			printf("2. 不需要，我是高手\n");
+			int tmp;
+			scanf(" %d", &tmp);
+			switch (tmp) {
+			case 1:
+				INFOR();
+				break;
+			case 2:
+				printf("请:>\n");
+				game();
+				break;
+			}
 			break;
 		case 0:
-			printf("退出游戏");
+			printf("不孤独就退出程序");
 			break;
 		case 2:
-			INFOR();
+			printf("\n这是一款 能在孤独时陪你下棋的温暖AI!!!\n\n");
 			break;
 		default:
 			printf("选择序号有误，请重新选择>\n");

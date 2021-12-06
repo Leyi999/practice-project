@@ -1,17 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include"menu.h"
 
-void Main_menu() {
-		printf("*************************\n");
-		printf("*********1. PLAY*********\n");
-		printf("*********0. EXIT*********\n");
-		printf("*************************\n");
-		printf("*********2. INFOR********\n");
-	}
 void Infor_menu() {
 	printf("1.三子棋游戏规则\n");
 	printf("2.游戏简介\n");
-	printf("0.都懂了（EXIT）\n");
+	printf("0.都懂了（Ready）\n");
 }
 void rules() {
 	
@@ -21,7 +14,7 @@ void rules() {
 }
 void infor() {
 	printf("该游戏的对手是凝聚了作者 目前所有的编程智慧结晶的AI副本\n"); 
-	printf("难度极大，请谨慎尝试挑战，以免留下日后难以消除的心理阴影:>\n");
+	printf("原本难度极大，为了派遣你的孤独和保护你的心理健康故意放水\n若是不放水，难免日后留下难以消除的心理阴影 :>\n");
 	printf("\n");
 
 }

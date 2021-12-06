@@ -45,7 +45,7 @@ void Player_Move(char Board[ROW][COL], int row, int col) {
 }
 void Computer_Move(char Board[ROW][COL], int row, int col) {
 	int ro, co;
-	printf("Íæ¼Ò×ß:>\n");
+	printf("AI×ß:>\n");
 	while (1) {
 		ro = rand() % row;
 		co = rand() % col;
@@ -54,7 +54,6 @@ void Computer_Move(char Board[ROW][COL], int row, int col) {
 			break;
 		}
 	}
-
 }
 int Is_full(char Board[ROW][COL], int row, int col) {
 	int i = row;
@@ -71,20 +70,17 @@ int Is_full(char Board[ROW][COL], int row, int col) {
 char Is_win(char Board[ROW][COL], int row, int col) {
 	int i;
 	int j;
-	int flag_row;
-	int flag_col;
-	int flag_left;
-	int flag_right;
-	flag_row = flag_col=flag_left=flag_right= 0;
-	for (i = 0; i < row; i++, flag_row = 0) {
+	int flag;
+	flag= 0;
+	for (i = 0; i < row; i++, flag = 0) {
 		
 		for (j = 1; j < col; j++) {
 			if (' ' == Board[i][j - 1] || ' ' == Board[i][j]) {
 				continue;
 			}
 			if (Board[i][j] == Board[i][j-1]) {
-				flag_row++;
-				if (flag_row == 2)
+				flag++;
+				if (flag == 2)
 					return Board[i][j];
 			}
 			
@@ -92,7 +88,7 @@ char Is_win(char Board[ROW][COL], int row, int col) {
 		
 	}
 
-	for (j = 0; j < col; j++, flag_col = 0) {
+	for (j = flag = 0; j < col; j++, flag = 0) {
 
 		for (i = 1; i < row; i++) {
 
@@ -100,29 +96,29 @@ char Is_win(char Board[ROW][COL], int row, int col) {
 				continue;
 			}
 			if (Board[i][j] == Board[i-1][j])
-				flag_col++;
-			if (2 == flag_col)
+				flag++;
+			if (2 == flag)
 				return Board[i][j];
 		}
 		
 	}
 	
-	for (i = 1; i < row; i++) {
+	for (i = 1,flag = 0; i < row; i++) {
 		
 		if ((Board[i][i] == Board[i - 1][i - 1])&&Board[i][i]!=' ') {
-			flag_left++;
+			flag++;
 		}
-		if (2==flag_left) {
+		if (2==flag) {
 			return Board[i][i];
 		}
 	}
 
-	for (i = 1, j = 1; i < row&&j>=0; i++,j--) {
+	for (i = 1, j = 1, flag = 0; i < row&&j>=0; i++,j--) {
 		//0,2 //1,1 //2,0 
 		if ((Board[i][j] == Board[i - 1][j + 1]) && Board[i][j] != ' ') {
-			flag_right++;
+			flag++;
 		}
-		if (2 == flag_right) {
+		if (2 == flag) {
 			return Board[i][j];
 		}
 
