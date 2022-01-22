@@ -5,10 +5,10 @@
 
 void Main_menu() {
 	printf("*************************\n");
-	printf("******1. 我很孤独********\n");
-	printf("******0. 我不孤独********\n");
+	printf("******1. 开始下棋********\n");
+	printf("******0. 退出程序********\n");
 	printf("*************************\n");
-	printf("******2. 我不理解********\n");
+	printf("******2. 这是什么********\n");
 }
 
 void game() {
@@ -81,7 +81,6 @@ int main() {
 		scanf("%d", &input);
 		switch (input) {
 		case 1:
-			printf("\n既然你很孤独，我们来下棋吧！\n");
 			printf("\n需要看规则吗？\n\n");
 			printf("1. 需要，我不知道怎么下\n");
 			printf("2. 不需要，我是高手\n");
@@ -98,10 +97,10 @@ int main() {
 			}
 			break;
 		case 0:
-			printf("不孤独就退出程序");
+			printf("立即退出程序");
 			break;
 		case 2:
-			printf("\n这是一款 能在孤独时陪你下棋的温暖AI!!!\n\n");
+			printf("\n这是一款 与人工智能对弈的三子棋!!!\n\n");
 			break;
 		default:
 			printf("选择序号有误，请重新选择>\n");
