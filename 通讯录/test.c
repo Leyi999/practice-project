@@ -12,27 +12,27 @@ int main() {
 		printf("请选择序号:>");
 		scanf("%d", &input);
 		switch (input) {
-		case 1:
+		case Add:
 			AddContact(pc);
 			break;
-		case 2:
+		case Del:
 			DelContact(pc);
 			break;
-		case 3:
+		case Srch:
 			SearchContact(pc);
 			break;
-		case 4:
+		case Moidfy:
 			ModifyContact(pc);
 			break;
-		case 5:
+		case Sort:
 			SortContact(pc);
 			break;
-		case 6:
+		case Show:
 			ShowContact(pc);
 			break;
-		case 7:
+		case Init:
 			InitContact(pc);
-		case 0:
+		case Exit:
 			break;
 		default:
 			printf("输入错误，重新输入!\n");

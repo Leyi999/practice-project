@@ -9,7 +9,17 @@
 #include<stdlib.h>
 #include<string.h>
 #include<assert.h>
-
+typedef enum opintion //可能选项的枚举类型
+{
+	Exit,
+	Add,
+	Del,
+	Srch,
+	Moidfy,
+	Sort,
+	Show,
+	Init,
+}opintion;
 typedef struct peoInfor {//重命名结构体方便编码
 	int age;
 	char name[NAME_MAX];
