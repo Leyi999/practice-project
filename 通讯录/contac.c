@@ -19,7 +19,7 @@ void InitContact(contact** p) {
 }
 void GetMemory(contact** p) {
 	assert(*p);
-	contact*t = (contact*)realloc(*p,sizeof(contact)+((*p)->MemerSize+2)*sizeof(peoInfor));
+	contact* t = (contact*)realloc(*p, sizeof(contact) + ((*p)->MemerSize + 2) * sizeof(peoInfor));
 	if (t == NULL) {
 		printf("增容失败!\n");
 		printf("%s", strerror(errno));
@@ -86,26 +86,26 @@ void DelContact(contact** p) {
 		return;
 		printf("\n");
 	}
-	int ret = FindContact((*p));
+	int ret = FindContact(p);
 	if (ret == -1) {
 		printf("查找不到该联系人，删除失败!\n");
 		printf("\n");
 		return;
 	}
-	memmove((*p)->data + ret, (*p)->data + ret + 1, (DATA_MAX - ret) * sizeof((*p)->data[0]));
+	memmove((*p)->data + ret, (*p)->data + ret + 1, ((*p)->MemerSize - ret) * sizeof(peoInfor));
 	(*p)->dataSize--;
 	printf("删除成功!\n");
 	printf("\n");
 
 }
-void ModifyContact(contact* (*p)) {
+void ModifyContact(contact**p) {
 	assert((*p));
 	if (!(*p)->dataSize) {
 		printf("当前通讯录为空，无法修改!\n");
 		printf("\n");
 		return;
 	}
-	int ret = FindContact((*p));
+	int ret = FindContact(p);
 	if (ret == -1) {
 		printf("查找不到该联系人!\n");
 		printf("\n");
@@ -125,7 +125,7 @@ void ModifyContact(contact* (*p)) {
 	printf("修改成功！\n");
 
 }
-void ShowContact(contact* (*p)) {
+void ShowContact(contact **p) {
 	assert((*p));
 	if (!(*p)->dataSize) {
 		printf("                （空）                    \n");
@@ -188,6 +188,11 @@ void SortContact(contact** p) {
 		else
 			printf("排序成功!\n");
 	} while (input > 5 || input < 1);
+}
+void FreeContact(contact** p) {
+	assert(*p);
+	free(*p);
+	*p = NULL;
 }
 
 

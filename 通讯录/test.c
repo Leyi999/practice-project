@@ -33,12 +33,13 @@ int main() {
 		case Init:
 			InitContact(pc);
 		case Exit:
+			printf("退出程序...\n");
 			break;
 		default:
 			printf("输入错误，重新输入!\n");
 		}
 
 	} while (input);
-
+	FreeContact(pc);
 	return 0;
 }
