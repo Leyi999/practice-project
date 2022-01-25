@@ -7,43 +7,59 @@ void meun() {
 	printf("******     5.排序     6.显示    *******\n");
 	printf("******     7.清空     0.退出    *******\n");
 }
-void InitContact(contact* p) {
-	assert(p);
-	memset(p,0, sizeof(*p));
-}
-void AddContact(contact* p) {
-	assert(p);
-	if (p->dataSize>=1000) {
-		printf("通讯录已满，无法添加!\n");
+void InitContact(contact** p) {
+	*p=malloc(sizeof(**p)+2*sizeof(peoInfor));
+	if (*p == NULL) {
+		printf("初始化失败!\n");
+		printf("%s", strerror(errno));
 		return;
 	}
-	printf("请输入姓名:>");
-	scanf("%s", p->data[p->dataSize].name);
-	printf("请输入性别:>");
-	scanf("%s", p->data[p->dataSize].sex);
-	printf("请输入年龄:>");
-	scanf("%d", &(p->data[p->dataSize].age));
-	printf("请输入住址:>");
-	scanf("%s", p->data[p->dataSize].addr);
-	printf("请输入电话号码:>");
-	scanf("%s", p->data[p->dataSize].num);
-	printf("添加成功！\n");
-	p->dataSize++;
+	(*p)->MemerSize = 2;
+	(*p)->dataSize = 0;
 }
-int FindContact(contact* p) {
-	assert(p);
+void GetMemory(contact** p) {
+	assert(*p);
+	contact*t = (contact*)realloc(*p,sizeof(contact)+((*p)->MemerSize+2)*sizeof(peoInfor));
+	if (t == NULL) {
+		printf("增容失败!\n");
+		printf("%s", strerror(errno));
+		return;
+	}
+	*p = t;
+	(*p)->MemerSize+=2;
+	printf("增容成功!\n");
+}
+void AddContact(contact** p) {
+	assert(*p);
+	if ((*p)->dataSize==(*p)->MemerSize)
+		GetMemory(p);
+	printf("请输入姓名:>");
+	scanf("%s", (*p)->data[(*p)->dataSize].name);
+	printf("请输入性别:>");
+	scanf("%s", (*p)->data[(*p)->dataSize].sex);
+	printf("请输入年龄:>");
+	scanf("%d", &((*p)->data[(*p)->dataSize].age));
+	printf("请输入住址:>");
+	scanf("%s", (*p)->data[(*p)->dataSize].addr);
+	printf("请输入电话号码:>");
+	scanf("%s", (*p)->data[(*p)->dataSize].num);
+	printf("添加成功！\n");
+	(*p)->dataSize++;
+}
+int FindContact(contact** p) {
+	assert(*p);
 	printf("请输入姓名:>");
 	char name[NAME_MAX];
 	scanf("%s",name);
-	for (int i = 0; i < p->dataSize; i++) {
-		if (!strcmp(p->data[i].name,name ))
+	for (int i = 0; i < (*p)->dataSize; i++) {
+		if (!strcmp((*p)->data[i].name,name ))
 			return i;
 	}
 	return -1;
 }
-void SearchContact(contact* p) {//查找并打印联系人；
+void SearchContact(contact** p) {//查找并打印联系人；
 	assert(p);
-	if (!p->dataSize) {
+	if (!(*p)->dataSize) {
 		printf("当前通讯录为空!\n");
 		printf("\n");
 
@@ -57,39 +73,39 @@ void SearchContact(contact* p) {//查找并打印联系人；
 		return;
 	}
 	printf("%-10s\t%-5s\t%-5s\t%s\t%s\n", "姓名", "性别", "年龄", "住址", "电话");
-	printf("%-10s\t%-5s\t%-5d\t%s\t%s\n", p->data[i].name, p->data[i].sex, p->data[i].age, p->data[i].addr, p->data[i].num);
+	printf("%-10s\t%-5s\t%-5d\t%s\t%s\n", (*p)->data[i].name, (*p)->data[i].sex, (*p)->data[i].age, (*p)->data[i].addr, (*p)->data[i].num);
 
 	printf("\n");
 
 }
 
-void DelContact(contact* p) {
-	assert(p);
-	if (!p->dataSize) {
+void DelContact(contact** p) {
+	assert(*p);
+	if (!(*p)->dataSize) {
 		printf("当前通讯录为空，无法删除!\n");
 		return;
 		printf("\n");
 	}
-	int ret = FindContact(p);
+	int ret = FindContact((*p));
 	if (ret == -1) {
 		printf("查找不到该联系人，删除失败!\n");
 		printf("\n");
 		return;
 	}
-	memmove(p->data + ret, p->data + ret + 1, (DATA_MAX - ret) * sizeof(p->data[0]));
-	p->dataSize--;
+	memmove((*p)->data + ret, (*p)->data + ret + 1, (DATA_MAX - ret) * sizeof((*p)->data[0]));
+	(*p)->dataSize--;
 	printf("删除成功!\n");
 	printf("\n");
 
 }
-void ModifyContact(contact* p) {
-	assert(p);
-	if (!p->dataSize) {
+void ModifyContact(contact* (*p)) {
+	assert((*p));
+	if (!(*p)->dataSize) {
 		printf("当前通讯录为空，无法修改!\n");
 		printf("\n");
 		return;
 	}
-	int ret = FindContact(p);
+	int ret = FindContact((*p));
 	if (ret == -1) {
 		printf("查找不到该联系人!\n");
 		printf("\n");
@@ -97,27 +113,27 @@ void ModifyContact(contact* p) {
 	}
 	printf("开始重新录入该联系人信息:>\n");
 	printf("请输入姓名:>");
-	scanf("%s", p->data[ret].name);
+	scanf("%s", (*p)->data[ret].name);
 	printf("请输入性别:>");
-	scanf("%s", p->data[ret].sex);
+	scanf("%s", (*p)->data[ret].sex);
 	printf("请输入年龄:>");
-	scanf("%d", &(p->data[ret].age));
+	scanf("%d", &((*p)->data[ret].age));
 	printf("请输入住址:>");
-	scanf("%s", p->data[ret].addr);
+	scanf("%s", (*p)->data[ret].addr);
 	printf("请输入电话号码:>");
-	scanf("%s", p->data[ret].num);
+	scanf("%s", (*p)->data[ret].num);
 	printf("修改成功！\n");
 
 }
-void ShowContact(contact* p) {
-	assert(p);
-	if (!p->dataSize) {
+void ShowContact(contact* (*p)) {
+	assert((*p));
+	if (!(*p)->dataSize) {
 		printf("                （空）                    \n");
 		return;
 	}
 	printf("%-10s\t%-5s\t%-5s\t%s\t%s\n", "姓名", "性别", "年龄", "住址", "电话");
-	for (int i = 0; i < p->dataSize; i++) {
-		printf("%-10s\t%-5s\t%-5d\t%s\t%s\n", p->data[i].name, p->data[i].sex, p->data[i].age, p->data[i].addr, p->data[i].num);
+	for (int i = 0; i < (*p)->dataSize; i++) {
+		printf("%-10s\t%-5s\t%-5d\t%s\t%s\n", (*p)->data[i].name, (*p)->data[i].sex, (*p)->data[i].age, (*p)->data[i].addr, (*p)->data[i].num);
 	}
 	printf("\n");
 }
@@ -136,11 +152,11 @@ int cmp_byname(void const* e1, void const* e2) {
 int cmp_bynum(void const* e1, void const* e2) {
 	return strcmp(((peoInfor*)e1)->num, ((peoInfor*)e2)->num);
 }
-void SortContact(contact* p) {
+void SortContact(contact** p) {
 	int input;
-	if(!p->dataSize)
+	if(!((*p)->dataSize))
 		printf("当前通讯录为空，无需排序!\n");
-	assert(p);
+	assert(*p);
 	do {
 		printf("1.年龄    2.性别  \n");
 		printf("3.地址    4.电话  \n");
@@ -149,19 +165,19 @@ void SortContact(contact* p) {
 		scanf("%d", &input);
 		switch (input) {
 		case 1:
-			qsort(p->data, p->dataSize, sizeof(p->data[0]), cmp_byage);
+			qsort((*p)->data, (*p)->dataSize, sizeof((*p)->data[0]), cmp_byage);
 			break;
 		case 2:
-			qsort(p->data, p->dataSize, sizeof(p->data[0]), cmp_bysex);
+			qsort((*p)->data, (*p)->dataSize, sizeof((*p)->data[0]), cmp_bysex);
 			break;
 		case 3:
-			qsort(p->data, p->dataSize, sizeof(p->data[0]), cmp_byaddr);
+			qsort((*p)->data, (*p)->dataSize, sizeof((*p)->data[0]), cmp_byaddr);
 			break;
 		case 4:
-			qsort(p->data, p->dataSize, sizeof(p->data[0]), cmp_bynum);
+			qsort((*p)->data, (*p)->dataSize, sizeof((*p)->data[0]), cmp_bynum);
 			break;
 		case 5:
-			qsort(p->data, p->dataSize, sizeof(p->data[0]), cmp_byname);
+			qsort((*p)->data, (*p)->dataSize, sizeof((*p)->data[0]), cmp_byname);
 			break;
 		case 0:
 			break;

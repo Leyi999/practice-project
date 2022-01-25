@@ -2,9 +2,9 @@
 // 1000人 姓名 年龄 电话 住址 性别 
 //增加 删除 查找 修改
 #include"contac.h"
-contact con;
+contact* con;
 int main() {
-	contact* pc = &con;
+	contact** pc = &con;
 	InitContact(pc);
 	int input;
 	do {

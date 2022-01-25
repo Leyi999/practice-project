@@ -1,14 +1,17 @@
 #pragma once
+
 #define _CRT_SECURE_NO_WARNINGS 1
 #define DATA_MAX 1000
 #define NAME_MAX 20
 #define SEX_MAX 6
 #define ADDR_MAX 50 
 #define NUM_MAX 20
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<assert.h>
+#include<errno.h>
 typedef enum opintion //可能选项的枚举类型
 {
 	Exit,
@@ -28,8 +31,9 @@ typedef struct peoInfor {//重命名结构体方便编码
 	char num[NUM_MAX];
 }peoInfor;
 typedef struct contact {//重命名结构体方便编码
-	peoInfor data[DATA_MAX];
 	int dataSize;
+	int MemerSize;
+	peoInfor data[];
 }contact;
 void InitContact(contact*p);//初始化通讯录
 
