@@ -3,9 +3,12 @@
 //增加 删除 查找 修改
 #include"contac.h"
 contact* con;
+
 int main() {
+
 	contact** pc = &con;
 	InitContact(pc);
+	LoadData(pc);
 	int input;
 	do {
 		meun();
@@ -32,14 +35,22 @@ int main() {
 			break;
 		case Init:
 			InitContact(pc);
-		case Exit:
+			break;
+		case Save:
+			SaveContact(pc);
+			break;
+		case ExitwithoutSave:
 			printf("退出程序...\n");
+			break;
+		case ExitandSave:
+			printf("保存并退出...");
+			SaveContact(pc);
 			break;
 		default:
 			printf("输入错误，重新输入!\n");
 		}
 
-	} while (input);
+	} while (input != ExitandSave && input != ExitwithoutSave);
 	FreeContact(pc);
 	return 0;
 }

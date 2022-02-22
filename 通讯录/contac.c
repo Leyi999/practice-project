@@ -1,11 +1,24 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include"contac.h"
 void meun() {
-	printf("******          通讯录          *******\n");
-	printf("******     1.新建     2.删除    *******\n");
-	printf("******     3.查找     4.修改    *******\n");
-	printf("******     5.排序     6.显示    *******\n");
-	printf("******     7.清空     0.退出    *******\n");
+	printf("******             乐意牌通讯录               *******\n");
+	printf("******     1.新建联系人     2.删除联系人      *******\n");
+	printf("******     3.查找联系人     4.修改联系人      *******\n");
+	printf("******     5.排序联系人     6.显示全部联系人  *******\n");
+	printf("******     7.格式化通讯录   8.保存            *******\n");
+	printf("******              9.退出不保存              *******\n");
+	printf("******              0.退出并保存              *******\n");
+}
+void GetMemory(contact** p) {
+	assert(*p);
+	contact* t = (contact*)realloc(*p, sizeof(contact) + ((*p)->MemerSize + 2) * sizeof(peoInfor));
+	if (t == NULL) {
+		printf("增容失败!\n");
+		printf("%s", strerror(errno));
+		return;
+	}
+	*p = t;
+	(*p)->MemerSize += 2;
 }
 void InitContact(contact** p) {
 	*p=malloc(sizeof(**p)+2*sizeof(peoInfor));
@@ -17,17 +30,18 @@ void InitContact(contact** p) {
 	(*p)->MemerSize = 2;
 	(*p)->dataSize = 0;
 }
-void GetMemory(contact** p) {
-	assert(*p);
-	contact* t = (contact*)realloc(*p, sizeof(contact) + ((*p)->MemerSize + 2) * sizeof(peoInfor));
-	if (t == NULL) {
-		printf("增容失败!\n");
-		printf("%s", strerror(errno));
-		return;
+void LoadData(contact** p) {
+	pf = fopen(DataFlie_NAME, "rb+");
+	if (pf == NULL) {
+		printf("%s\n(若此次非本程序的首次运行，请检查%s是否遗失)\n", strerror(errno),DataFlie_NAME);
+		return ;
 	}
-	*p = t;
-	(*p)->MemerSize+=2;
-	printf("增容成功!\n");
+	peoInfor tmp;
+	while (fread(&tmp, sizeof(peoInfor), 1, pf)) {
+		if ((*p)->dataSize == (*p)->MemerSize)
+			GetMemory(p);
+		(*p)->data[(*p)->dataSize++] = tmp;
+	}
 }
 void AddContact(contact** p) {
 	assert(*p);
@@ -74,7 +88,6 @@ void SearchContact(contact** p) {//查找并打印联系人；
 	}
 	printf("%-10s\t%-5s\t%-5s\t%s\t%s\n", "姓名", "性别", "年龄", "住址", "电话");
 	printf("%-10s\t%-5s\t%-5d\t%s\t%s\n", (*p)->data[i].name, (*p)->data[i].sex, (*p)->data[i].age, (*p)->data[i].addr, (*p)->data[i].num);
-
 	printf("\n");
 
 }
@@ -111,19 +124,44 @@ void ModifyContact(contact**p) {
 		printf("\n");
 		return;
 	}
-	printf("开始重新录入该联系人信息:>\n");
-	printf("请输入姓名:>");
-	scanf("%s", (*p)->data[ret].name);
-	printf("请输入性别:>");
-	scanf("%s", (*p)->data[ret].sex);
-	printf("请输入年龄:>");
-	scanf("%d", &((*p)->data[ret].age));
-	printf("请输入住址:>");
-	scanf("%s", (*p)->data[ret].addr);
-	printf("请输入电话号码:>");
-	scanf("%s", (*p)->data[ret].num);
-	printf("修改成功！\n");
+	int input;
+	do {
+		printf("%-10s\t%-5s\t%-5s\t%s\t%s\n", "姓名", "性别", "年龄", "住址", "电话");
+		printf("%-10s\t%-5s\t%-5d\t%s\t%s\n", (*p)->data[ret].name, (*p)->data[ret].sex, (*p)->data[ret].age, (*p)->data[ret].addr, (*p)->data[ret].num);
+		printf("请选择需要修改的内容:>\n");
+		printf("1.%4s\t\t2.%4s\n", "姓名", "性别");
+		printf("3.%4s\t\t4.%4s\n", "年龄", "住址");
+		printf("5.%4s\t\t0.%4s\n", "电话号码", "返回");
+		scanf("%d", &input);
 
+		switch (input) {
+		case 0:
+			break;
+		case 1:
+			printf("请输入姓名:>");
+			scanf("%s", (*p)->data[ret].name);
+			break;
+		case 2:
+			printf("请输入性别:>");
+			scanf("%s", (*p)->data[ret].sex);
+			break;
+		case 3:
+			printf("请输入年龄:>");
+			scanf("%d", &((*p)->data[ret].age));
+			break;
+		case 4:
+			printf("请输入住址:>");
+			scanf("%s", (*p)->data[ret].addr);
+			break;
+		case 5:
+			printf("请输入电话号码:>");
+			scanf("%s", (*p)->data[ret].num);
+			break;
+		default:
+			printf("输入错误，请重新输入\n");
+		}
+		if (input)printf("修改成功！\n");
+	} while (input < 0 || input>5);
 }
 void ShowContact(contact **p) {
 	assert((*p));
@@ -189,8 +227,19 @@ void SortContact(contact** p) {
 			printf("排序成功!\n");
 	} while (input > 5 || input < 1);
 }
+void SaveContact(contact** p) {
+	pf = fopen(DataFlie_NAME, "wb");
+	if (pf == NULL) {
+		printf("\nSaveContact:: %s\n", strerror(errno));
+		return;
+	}
+	fwrite((*p)->data, sizeof(peoInfor), (*p)->dataSize, pf);
+
+}
 void FreeContact(contact** p) {
 	assert(*p);
+	fclose(pf);
+	pf = NULL;
 	free(*p);
 	*p = NULL;
 }

@@ -7,14 +7,19 @@
 #define ADDR_MAX 50 
 #define NUM_MAX 20
 
+#define DataFlie_NAME "infodata.txt"
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<assert.h>
 #include<errno.h>
+
+FILE* pf;
+
 typedef enum opintion //可能选项的枚举类型
 {
-	Exit,
+	ExitandSave,
 	Add,
 	Del,
 	Srch,
@@ -22,6 +27,8 @@ typedef enum opintion //可能选项的枚举类型
 	Sort,
 	Show,
 	Init,
+	Save,
+	ExitwithoutSave,
 }opintion;
 typedef struct peoInfor {//重命名结构体方便编码
 	int age;
@@ -58,3 +65,6 @@ void SortContact(contact **p);//排序联系人
 
 void ShowContact(contact **p);//显示联系人
 
+void SaveContact(contact** p);//存储联系人
+
+void LoadData(contact** p);//读取磁盘中存储的信息
