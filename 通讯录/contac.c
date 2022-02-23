@@ -31,9 +31,10 @@ void InitContact(contact** p) {
 	(*p)->dataSize = 0;
 }
 void LoadData(contact** p) {
-	pf = fopen(DataFlie_NAME, "rb+");
+	pf = fopen(DataFlie_NAME, "rb");
 	if (pf == NULL) {
 		printf("%s\n(若此次非本程序的首次运行，请检查%s是否遗失)\n", strerror(errno),DataFlie_NAME);
+		fclose(pf);
 		return ;
 	}
 	peoInfor tmp;
