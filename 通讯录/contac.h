@@ -15,8 +15,6 @@
 #include<assert.h>
 #include<errno.h>
 
-FILE* pf;
-
 typedef enum opintion //可能选项的枚举类型
 {
 	ExitandSave,
@@ -47,7 +45,7 @@ void InitContact(contact **p);//初始化通讯录
 
 void GetMemory(contact **p);//给通讯录增容
 
-void FreeContact(contact** p);
+void FreeContact(contact** p, FILE** pf);
 
 void meun();//通讯录菜单
 
@@ -65,6 +63,6 @@ void SortContact(contact **p);//排序联系人
 
 void ShowContact(contact **p);//显示联系人
 
-void SaveContact(contact** p);//存储联系人
+void SaveContact(contact** p, FILE** pf);//存储联系人
 
-void LoadData(contact** p);//读取磁盘中存储的信息
+void LoadData(contact** p, FILE** pf);//读取磁盘中存储的信息

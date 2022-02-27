@@ -30,15 +30,14 @@ void InitContact(contact** p) {
 	(*p)->MemerSize = 2;
 	(*p)->dataSize = 0;
 }
-void LoadData(contact** p) {
-	pf = fopen(DataFlie_NAME, "rb");
-	if (pf == NULL) {
+void LoadData(contact** p, FILE** pf) {
+	*pf = fopen(DataFlie_NAME, "rb");
+	if (*pf == NULL) {
 		printf("%s\n(若此次非本程序的首次运行，请检查%s是否遗失)\n", strerror(errno),DataFlie_NAME);
-		fclose(pf);
 		return ;
 	}
 	peoInfor tmp;
-	while (fread(&tmp, sizeof(peoInfor), 1, pf)) {
+	while (fread(&tmp, sizeof(peoInfor), 1, *pf)) {
 		if ((*p)->dataSize == (*p)->MemerSize)
 			GetMemory(p);
 		(*p)->data[(*p)->dataSize++] = tmp;
@@ -77,20 +76,17 @@ void SearchContact(contact** p) {//查找并打印联系人；
 	if (!(*p)->dataSize) {
 		printf("当前通讯录为空!\n");
 		printf("\n");
-
 		return;
 	}
 	int i = FindContact(p);
 	if (i == -1) {
 		printf("查找不到该联系人!\n");
 		printf("\n");
-
 		return;
 	}
 	printf("%-10s\t%-5s\t%-5s\t%s\t%s\n", "姓名", "性别", "年龄", "住址", "电话");
 	printf("%-10s\t%-5s\t%-5d\t%s\t%s\n", (*p)->data[i].name, (*p)->data[i].sex, (*p)->data[i].age, (*p)->data[i].addr, (*p)->data[i].num);
 	printf("\n");
-
 }
 
 void DelContact(contact** p) {
@@ -167,7 +163,7 @@ void ModifyContact(contact**p) {
 void ShowContact(contact **p) {
 	assert((*p));
 	if (!(*p)->dataSize) {
-		printf("                （空）                    \n");
+		printf("                      （空）                    \n");
 		return;
 	}
 	printf("%-10s\t%-5s\t%-5s\t%s\t%s\n", "姓名", "性别", "年龄", "住址", "电话");
@@ -228,19 +224,19 @@ void SortContact(contact** p) {
 			printf("排序成功!\n");
 	} while (input > 5 || input < 1);
 }
-void SaveContact(contact** p) {
-	pf = fopen(DataFlie_NAME, "wb");
-	if (pf == NULL) {
+void SaveContact(contact** p,FILE**pf) {
+	*pf = fopen(DataFlie_NAME, "wb");
+	if (*pf == NULL) {
 		printf("\nSaveContact:: %s\n", strerror(errno));
 		return;
 	}
-	fwrite((*p)->data, sizeof(peoInfor), (*p)->dataSize, pf);
+	fwrite((*p)->data, sizeof(peoInfor), (*p)->dataSize, *pf);
 
 }
-void FreeContact(contact** p) {
-	assert(*p);
-	fclose(pf);
-	pf = NULL;
+void FreeContact(contact** p,FILE** pf) {
+	assert(*p&&*pf);
+	fclose(*pf);
+	*pf = NULL;
 	free(*p);
 	*p = NULL;
 }
