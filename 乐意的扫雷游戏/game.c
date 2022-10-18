@@ -68,20 +68,19 @@ char CountMine(char Board[ROWS][COLS], char show[ROWS][COLS],int row, int col) {
 	
 
 void Extend(char Board[ROWS][COLS],char show[ROWS][COLS],int row,int col){
+	if (row > 9 || col > 9 || row < 1 || col < 1)//增加退出条件
+		return;
 	show[row][col] = ' ';
-
 	int i, j;
 	for (i = row - 1; i < row + 2; i++) {
 		for (j = col - 1; j < col + 2; j++) {
-			
 			if (show[i][j] == '*') {
 				show[i][j] = CountMine(Board, show, i, j);
 				if (show[i][j] == '0') {
 					Extend(Board, show, i, j);
 				}
 			}
-		}
-		
+		}	
 	}
 }
 int Is_win(char Board[ROWS][COLS],char show[ROWS][COLS], int row, int col,int nub) {
@@ -101,8 +100,6 @@ int Is_win(char Board[ROWS][COLS],char show[ROWS][COLS], int row, int col,int nu
 				COUNT0++;
 				if (Board[i][j] == '#') {
 					COUNT++;
-
-
 				}
 			}
 		}
@@ -113,7 +110,6 @@ int Is_win(char Board[ROWS][COLS],char show[ROWS][COLS], int row, int col,int nu
 	else if (nub == count && nub <= count0) {
 		return 2;
 	}
-	
 	return 0;
 }
 
@@ -153,11 +149,7 @@ char FindMine(char Board[ROWS][COLS],char show[ROWS][COLS], int row,int col,int 
 				DisplayBoard(show, row, col);
 				return 'W';
 			}
-			
 			DisplayBoard(show, row, col);
-		
-			
-
 			break;
 		case 2://标记
 			printf("请输入要标记的行列:>");
@@ -222,10 +214,10 @@ void game() {
 		switch (tmpe)
 		{
 		case 1:
-			nub = 10;
+			nub = 5;
 			break;
 		case 2:
-			nub = 15;
+			nub = 10;
 			break;
 		case 3:
 			nub = 20;
@@ -246,17 +238,15 @@ void game() {
 			printf(".");
 			Sleep(600);
 		}
-		printf("\n");
-		DisplayBoard(Board, ROW, COL);
 		break;
 	case'W':
-
 		SleepPrint("你赢了");
 		for (int i = 0; i < 3; i++) {
 			printf("!");
 			Sleep(600);
 		}
-		printf("\n");
-		DisplayBoard(Board, ROW, COL);
 	}
+		printf("\n");
+		Extend(show, Board, 1, 1);//只展示雷的数量
+		DisplayBoard(Board, ROW, COL);
 }
