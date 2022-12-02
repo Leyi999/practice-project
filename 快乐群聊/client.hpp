@@ -1,3 +1,4 @@
+//windows 客户端
 #pragma once
 #pragma comment(lib, "ws2_32.lib")
 #include<iostream>
@@ -145,6 +146,7 @@ public:
 		WSACleanup();
 	}
 	void run(const string& name) {
+		//多线程
 		thread send_thread{ thread_send_routine,this,name };
 		thread recv_thread{ thread_recive_routine,this, GetConsoleCursor() };
 		thread keep_online{ thread_keep_online_routine,this };

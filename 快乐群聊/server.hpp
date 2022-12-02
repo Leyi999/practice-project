@@ -34,6 +34,7 @@ struct sock_cmp
 class server_t
 {
 public:
+    //udp通讯
     server_t(const uint32_t port_num)
     {
         bzero(_buffer, buffer_size);
@@ -55,6 +56,7 @@ public:
             exit(3);
         }
     }
+    //转发数据
     void send()
     {
         for (auto &e : _clients)
@@ -63,6 +65,7 @@ public:
                 _clients.erase(e.first);
         }
     }
+    //单线程
     void run()
     {
         sockaddr_in peer;
@@ -82,8 +85,10 @@ public:
     }
 
 private:
+    //缓冲区
     char _buffer[buffer_size];
     int _socket_fd;
     sockaddr_in _host;
+    //用户
     map<uint16_t, sockaddr_in> _clients;
 };
