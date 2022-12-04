@@ -15,10 +15,5 @@ int main() {
 	udp_client_t client(server_ip,server_port,local_ip.c_str());
 	//3 连接服务器
 	client.run(name);
-
-
-
-	
-
 	return 0;
 }
