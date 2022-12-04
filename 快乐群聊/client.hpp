@@ -48,7 +48,7 @@ string get_time() {
 	}
 	return string(time_str.begin() + start, time_str.begin() + end);
 }
-void trimstring(std::string& str)
+void trim_string(std::string& str)
 {
 	if (!str.empty())
 	{
@@ -57,7 +57,7 @@ void trimstring(std::string& str)
 	}
 }
 
-std::string getlocalip()
+string get_local_ip()
 {
 	std::string ip("");
 	std::string ipconfig_content;
@@ -81,7 +81,7 @@ std::string getlocalip()
 				if (p3 != std::string::npos)
 				{
 					ip = ipconfig_content.substr(p2 + 1, p3 - p2 - 1);
-					trimstring(ip);
+					trim_string(ip);
 				}
 			}
 		}
@@ -94,12 +94,12 @@ string get_comp_time() {
 	time_t current_time = time(nullptr);
 	return 	string(ctime(&current_time));
 }
-void setxy(SHORT x, SHORT y)
+void set_cursor_position(SHORT x, SHORT y)
 {
 	COORD coord = { x, y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
-COORD GetConsoleCursor() {
+COORD get_cursor() {
 	COORD coordScreen = { 0, 0 }; //光标位置
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
@@ -148,7 +148,7 @@ public:
 	void run(const string& name) {
 		//多线程
 		thread send_thread{ thread_send_routine,this,name };
-		thread recv_thread{ thread_recive_routine,this, GetConsoleCursor() };
+		thread recv_thread{ thread_recive_routine,this, get_cursor() };
 		thread keep_online{ thread_keep_online_routine,this };
 		recv_thread.join();
 		send_thread.join();
@@ -176,13 +176,13 @@ private:
 		while (1) {
 			//设置光标位置
 			_this->_cursor_mutex.lock();
-			setxy(50, 0);
+			set_cursor_position(50, 0);
 			cout << string(49, ' ') << endl;;
-			setxy(50, 0);
+			set_cursor_position(50, 0);
 			cout.flush();
 			//输入数据
 			cout << "请输入:> ";
-			setxy(60, 0);
+			set_cursor_position(60, 0);
 			_this->_cursor_mutex.unlock();
 			time = get_time();
 			fgets((char*)buffer_str.c_str()+input_index, buffer_size - 1, stdin);
@@ -192,28 +192,29 @@ private:
 		}
 	}
 	static void thread_recive_routine(udp_client_t* _this,COORD start_pos) {
-		//接收缓冲区
 		static int count = 0;
+		//接收缓冲区
 		char buffer[buffer_size];
 		memset((void*)buffer, 0, buffer_size);
 		auto cur_pos = start_pos;
 		while (1) {
+			//接收消息
 			int recv_ret=recvfrom(_this->_socket_fd,buffer,buffer_size-1,0,NULL,NULL);
+			//处理消息
 			if (recv_ret > 0&&buffer[0]!='\0') {
 				_this->_cursor_mutex.lock();
-				auto back_pos = GetConsoleCursor();
-				setxy(cur_pos.X, cur_pos.Y);
+				auto back_pos = get_cursor();
+				set_cursor_position(cur_pos.X, cur_pos.Y);
 				if (count == 24) {
 					system("cls");
 					count = -6;
 				}
 				cout << buffer;
 				count++;
-				cur_pos = GetConsoleCursor();
-				setxy(back_pos.X, back_pos.Y);
+				cur_pos = get_cursor();
+				set_cursor_position(back_pos.X, back_pos.Y);
 				_this->_cursor_mutex.unlock();
 			}
-			//WSAEINVAL;
 		}
 	}
 private:
