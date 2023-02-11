@@ -1,6 +1,4 @@
 #include "parser.hpp"
-const std::string src_path = "../data/input/";
-const std::string output_file = "../data/raw_html/raw.html";
 int main()
 {
     // 1.拿到每个文件名+路径整理成file_list 方便以后读取
