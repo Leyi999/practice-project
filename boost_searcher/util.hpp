@@ -6,13 +6,13 @@ namespace bs_util
     class file_util
     {
     public:
-        static bool read_file(const std::string &file_path, std::string &output)
+        static bool read_file(const std::string &file_path, std::string &output, const std::ios_base::openmode mode)
         {
             // 输入文件流对象
-            std::ifstream ifs(file_path.c_str(), std::ios_base::in);
+            std::ifstream ifs(file_path.c_str(), mode);
             if (!ifs.is_open())
             {
-                std::cerr << "failed to create input file stream! "
+                std::cerr << "failed to open input file! "
                           << "file name:" << file_path << std::endl;
                 return false;
             }

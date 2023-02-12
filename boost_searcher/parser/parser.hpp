@@ -1,10 +1,11 @@
+#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
 // 引入boost准标准库完成复杂的文件操作
 #include <boost/filesystem.hpp>
 // 自定义工具集合
-#include "util.hpp"
+#include "../util.hpp"
 // 文件路径
 const std::string src_path = "../data/input/";
 const std::string output_file = "../data/raw_html/raw.html";
@@ -120,7 +121,7 @@ bool parse_html(const std::vector<std::string> &file_list, std::vector<doc_info_
     {
         // 读取文件 -若失败接着处理其他文件
         std::string file_str;
-        if (!bs_util::file_util::read_file(file_path, file_str))
+        if (!bs_util::file_util::read_file(file_path, file_str,std::ios_base::in))
         {
             std::cerr << "failed to read file ::" << file_path << std::endl;
             continue;
@@ -166,12 +167,11 @@ bool save_html(const std::vector<doc_info_t> &parse_result, const std::string &o
                   << "file name:" << output_file << std::endl;
         return false;
     }
-        static int n=1;
     for (const doc_info_t &doc_info : parse_result)
     {
         // 序列化
         std::string output_str;
-        output_str=doc_info.title + delimiter+doc_info.content+delimiter+doc_info.url+'\n';
+        output_str = doc_info.title + delimiter + doc_info.content + delimiter + doc_info.url + '\n';
         // 写入文件
         ofs.write(output_str.c_str(), output_str.size());
     }
